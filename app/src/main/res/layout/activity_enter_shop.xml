@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button android:id="@+id/seek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:textColor="#ffff"
+        android:background="#ff9900"
+        android:text="搜索"
+        />
+    <Button android:id="@+id/recommend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginLeft="50dp"
+        android:textColor="#ffff"
+        android:background="#ff9900"
+        android:text="推荐"
+        />
+    <Button android:id="@+id/activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginLeft="50dp"
+        android:textColor="#ffff"
+        android:background="#ff9900"
+        android:text="活动"
+        />
+</LinearLayout>

@@ -14,14 +14,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
-            android:text="店铺名称:" />
+            android:text="商品名称:" />
         <EditText
-            android:id="@+id/shop_name"
+            android:id="@+id/item_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:hint="Type your shop name here"/>
+            android:hint="Type your item name here"/>
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="20dp"
@@ -33,13 +33,31 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
-            android:text="店铺介绍" />
-        <EditText android:id="@+id/shop_introduction"
+            android:text="商品介绍" />
+        <EditText android:id="@+id/item_introduction"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:hint="Type shop introduction here" />
+            android:hint="Type item introduction here" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        android:orientation="horizontal"
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="20dp"
+            android:text="价格" />
+        <EditText android:id="@+id/item_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:hint="Type item price here" />
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="20dp"
@@ -47,10 +65,10 @@
         android:layout_height="wrap_content">
         android:orientation="horizontal"
         <Button
-            android:id="@+id/update_touxiang"
+            android:id="@+id/update_photo"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:text="上传头像" />
+            android:text="上传照片" />
         <Button
             android:id="@+id/take_photo"
             android:layout_width="90dp"
@@ -63,12 +81,12 @@
             android:text="选择照片"/>
     </LinearLayout>
     <ImageView
-        android:id="@+id/shop_photo"
+        android:id="@+id/item_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right" />
     <Button
-        android:id="@+id/finish_cshop"
+        android:id="@+id/finish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ff9900"

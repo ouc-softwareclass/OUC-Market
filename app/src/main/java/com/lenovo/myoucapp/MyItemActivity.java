@@ -2,24 +2,23 @@ package com.lenovo.myoucapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FirstUsersActivity extends AppCompatActivity {
+public class MyItemActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_first_layout);
+        setContentView(R.layout.my_item);
         Button button_enter_shop = (Button) findViewById(R.id.button_enter_shop);
         button_enter_shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                EnterShopActivity.actionStart(FirstUsersActivity.this);
+                EnterShopActivity.actionStart(MyItemActivity.this);
             }
         });
         TextView shop_name = (TextView) findViewById(R.id.shop_name);
@@ -27,7 +26,7 @@ public class FirstUsersActivity extends AppCompatActivity {
 
     }
     public static void actionStart(Context context){
-        Intent intent = new Intent(context, FirstUsersActivity.class);
+        Intent intent = new Intent(context, MyItemActivity.class);
         context.startActivity(intent);
     }
 

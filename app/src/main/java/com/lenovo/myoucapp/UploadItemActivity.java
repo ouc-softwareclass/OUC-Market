@@ -20,17 +20,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import org.litepal.LitePal;
 
 import java.io.File;
 import java.io.IOException;
 
-public class CreateShopActivity extends AppCompatActivity {
+public class UploadItemActivity extends AppCompatActivity {
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
     private ImageView picture;
     private Uri imageUri;
+    private EditText text_item_name;
+    private EditText text_item_intro;
     private void displayImage(String imagePath) {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
@@ -42,11 +47,14 @@ public class CreateShopActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_shop);
-        picture = (ImageView) findViewById(R.id.shop_photo);
-        Button finish_cshop = (Button) findViewById(R.id.finish_cshop);
+        setContentView(R.layout.upload_item);
+        picture = (ImageView) findViewById(R.id.item_photo);
+        Button finish_upload = (Button) findViewById(R.id.finish);
         Button chooseFromAlbum = (Button) findViewById(R.id.choose_photo);
         Button takePhoto = (Button) findViewById(R.id.take_photo);
+        text_item_name = (EditText) findViewById(R.id.item_name);
+        text_item_intro = (EditText) findViewById(R.id.item_introduction);
+
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +70,7 @@ public class CreateShopActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 if (Build.VERSION.SDK_INT >= 24) {
-                    imageUri = FileProvider.getUriForFile(CreateShopActivity.this,
+                    imageUri = FileProvider.getUriForFile(UploadItemActivity.this,
                             "com.example.cameraalbumtest.fileprovider", outputImage);
                 } else {
                     imageUri = Uri.fromFile(outputImage);
@@ -76,18 +84,23 @@ public class CreateShopActivity extends AppCompatActivity {
         chooseFromAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(CreateShopActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(CreateShopActivity.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
+                if (ContextCompat.checkSelfPermission(UploadItemActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(UploadItemActivity.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
                 } else {
                     openAlbum();
                 }
             }
         });
 
-        finish_cshop.setOnClickListener(new View.OnClickListener(){
+        finish_upload.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                FirstUsersActivity.actionStart(CreateShopActivity.this);
+                LitePal.getDatabase();  //输入店铺信息，建表
+                ItemInfo shop = new ItemInfo();
+                shop.setName(text_item_name.getText().toString());
+                shop.setIntroduction(text_item_intro.getText().toString());
+                shop.save();
+                MyItemActivity.actionStart(UploadItemActivity.this);
             }
         });
     }
@@ -96,6 +109,8 @@ public class CreateShopActivity extends AppCompatActivity {
         intent.setType("image/*");
         startActivityForResult(intent, CHOOSE_PHOTO); // 打开相册
     }
+   // private void finishSubmit() {
+    //}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -170,5 +185,4 @@ public class CreateShopActivity extends AppCompatActivity {
         }
         return path;
     }
-
 }

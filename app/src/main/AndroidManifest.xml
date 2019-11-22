@@ -10,13 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CreateShopActivity">
+        <activity android:name=".UploadItemActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FirstUsersActivity">
+        <activity android:name=".MyItemActivity">
             android:label="商家资料">
         </activity>
         <activity android:name=".EnterShopActivity" />

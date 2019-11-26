@@ -3,7 +3,7 @@
     package="com.lenovo.myoucapp">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
-        android:name="org.litepal.LitePalApplication"
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,10 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".MyItemActivity">
-            android:label="商家资料">
+
         </activity>
-        <activity android:name=".EnterShopActivity" />
+
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.cameraalbumtest.fileprovider"

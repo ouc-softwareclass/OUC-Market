@@ -3,15 +3,19 @@ package com.lenovo.myoucapp;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -19,27 +23,38 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.litepal.LitePal;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 public class UploadItemActivity extends AppCompatActivity {
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
     private ImageView picture;
     private Uri imageUri;
-    private EditText text_item_name;
-    private EditText text_item_intro;
-    private void displayImage(String imagePath) {
+    private  DatabaseHelper dbHelper;
+    private Spinner sp;
+    private ContentValues values=new ContentValues();
+    final SQLiteDatabase db = dbHelper.getWritableDatabase();
+    private void displayImage(String imagePath) {//同时把图片加载到数据库
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             picture.setImageBitmap(bitmap);
+            values.put("image",baos.toByteArray());
+            db.insert("iteminfo",null,values);
         } else {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
         }
@@ -52,9 +67,35 @@ public class UploadItemActivity extends AppCompatActivity {
         Button finish_upload = (Button) findViewById(R.id.finish);
         Button chooseFromAlbum = (Button) findViewById(R.id.choose_photo);
         Button takePhoto = (Button) findViewById(R.id.take_photo);
-        text_item_name = (EditText) findViewById(R.id.item_name);
-        text_item_intro = (EditText) findViewById(R.id.item_introduction);
-
+        String[] ctype = new String[]{"生活用品", "学习用品", "电子产品", "体育用品"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ctype);  //创建一个数组适配器
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);     //设置下拉列表框的下拉选项样式
+        Spinner spinner = (Spinner) super.findViewById(R.id.item_style);
+        spinner.setAdapter(adapter);
+        sp = (Spinner) findViewById(R.id.item_style);
+        final String kind = (String) sp.getSelectedItem();
+        finish_upload.setOnClickListener(new View.OnClickListener(){
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v){ //上传商品信息插入到数据库
+                EditText title=(EditText)findViewById(R.id.item_name);
+                EditText price=(EditText)findViewById(R.id.item_price);
+                EditText intro=(EditText)findViewById(R.id.item_introduction);
+                EditText contact=(EditText)findViewById(R.id.contact);
+                //在登录功能中给post_userid赋值 values.put("userId",post_userid);
+                values.put("title",title.getText().toString());
+                values.put("userId",post_userid);
+                values.put("kind", kind);
+                values.put("price",price.getText().toString());
+                values.put("contact",contact.getText().toString());
+                values.put("intro",intro.getText().toString());
+                //bmp.compress(Bitmap.CompressFormat.PNG, 100, os);
+               // cv.put("pic", os.toByteArray());
+                db.insert("iteminfo",null,values);
+                Toast.makeText(getApplicationContext(), "发布成功", Toast.LENGTH_SHORT).show();
+                MyItemActivity.actionStart(UploadItemActivity.this);
+            }
+        });
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,17 +133,7 @@ public class UploadItemActivity extends AppCompatActivity {
             }
         });
 
-        finish_upload.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                LitePal.getDatabase();  //输入店铺信息，建表
-                ItemInfo shop = new ItemInfo();
-                shop.setName(text_item_name.getText().toString());
-                shop.setIntroduction(text_item_intro.getText().toString());
-                shop.save();
-                MyItemActivity.actionStart(UploadItemActivity.this);
-            }
-        });
+
     }
     private void openAlbum() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
@@ -120,6 +151,8 @@ public class UploadItemActivity extends AppCompatActivity {
                     try {
                         // 将拍摄的照片显示出来
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
                         picture.setImageBitmap(bitmap);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -184,5 +217,9 @@ public class UploadItemActivity extends AppCompatActivity {
             cursor.close();
         }
         return path;
+    }
+    public static void actionStart(Context context){
+        Intent intent = new Intent(context, UploadItemActivity.class);
+        context.startActivity(intent);
     }
 }

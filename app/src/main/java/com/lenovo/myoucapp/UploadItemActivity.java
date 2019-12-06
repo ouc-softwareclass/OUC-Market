@@ -55,6 +55,17 @@ public class UploadItemActivity extends AppCompatActivity {
         text_item_name = (EditText) findViewById(R.id.item_name);
         text_item_intro = (EditText) findViewById(R.id.item_introduction);
 
+
+//        Button button = findViewById(R.id.collection_name);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(UploadItemActivity.this, CollectionActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
+
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

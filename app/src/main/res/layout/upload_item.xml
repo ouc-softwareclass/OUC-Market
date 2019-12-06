@@ -91,4 +91,11 @@
         android:layout_height="wrap_content"
         android:background="#ff9900"
         android:text="完成" />
+
+<!--    <Button-->
+<!--        android:id="@+id/collection_name"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="收藏"/>-->
+
 </LinearLayout>
